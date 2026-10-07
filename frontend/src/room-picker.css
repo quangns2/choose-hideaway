@@ -1,0 +1,40 @@
+.booking-dialog:has(.room-picker){max-width:800px}
+.room-picker{margin:0 0 25px;border:1px solid var(--line);background:#f2f3e9;padding:19px}
+.room-picker-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:17px}
+.room-picker-heading h3{font-size:23px;letter-spacing:-.5px;line-height:1.3;margin:0 0 7px}
+.room-picker-heading p{font-size:10px;line-height:1.7;color:var(--muted);margin:0}
+.room-picker-heading>button{display:flex;align-items:center;gap:5px;flex-shrink:0;border:0;background:none;font-size:10px;padding:4px 0;color:#60754f}
+.room-choice-grid{padding:0;border:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;min-width:0}
+.room-choice-grid legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.room-choice{position:relative;display:flex;align-items:stretch;min-width:0;background:var(--cream);border:1px solid #d6ddcd;cursor:pointer;transition:background .15s,border-color .15s}
+.room-choice:hover{border-color:#8b9b7c;background:#eef1e4}
+.room-choice.is-selected{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green);background:#e8eddf}
+.room-choice:has(input:focus-visible){outline:3px solid #9c783d;outline-offset:3px}
+.room-choice>input{position:absolute;width:1px;height:1px;opacity:0;margin:0;top:0;left:0}
+.room-choice-image{position:relative;width:95px;flex-shrink:0;background:var(--sand)}
+.room-choice-image img{width:100%;height:100%;min-height:165px;object-fit:cover}
+.room-choice-image>span{position:absolute;bottom:6px;left:5px;right:5px;background:#f8f6f0df;padding:4px 2px;font-size:7px;text-align:center;color:#63755a}
+.room-choice-content{padding:13px 12px;min-width:0;flex:1}
+.room-choice-category{display:block;font-size:8px;color:#748268;margin-bottom:5px;line-height:1.4}
+.room-choice-content>strong{display:block;font-size:12px;font-weight:500;line-height:1.5;margin:0 0 7px}
+.room-choice-content>p{font-size:9px;line-height:1.7;color:#6a7661;margin:0 0 9px}
+.room-choice-features{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 12px}
+.room-choice-features>span{font-size:7px;padding:3px 5px;border:1px solid #d4deca;line-height:1.5;color:#60774e}
+.room-choice-select{display:flex;align-items:center;gap:6px;font-size:9px;color:#637454;font-weight:500}
+.room-choice.is-selected .room-choice-select{color:var(--green)}
+.room-consult-icon{display:grid;place-items:center;width:64px;flex-shrink:0;background:#e4e9d9;color:#71845e;margin:12px 0 12px 12px}
+.room-choice-consult .room-choice-content{display:flex;flex-direction:column;justify-content:center}
+.room-picker-photo-note{font-size:9px;line-height:1.7;color:#738368;margin:14px 0 16px}
+.room-picker-finish{border-top:1px solid #d9dfce;padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.room-picker-finish>span{font-size:9px;color:#738267;line-height:1.7;max-width:50%}
+.room-picker-finish strong{font-weight:500;display:block;color:var(--ink)}
+.room-picker-finish .button{padding:10px 13px;min-height:42px;font-size:10px;gap:10px}
+.room-selected-summary{display:flex;gap:16px;align-items:center;background:var(--cream);border:1px solid #c9d5be;padding:12px}
+.room-selected-summary>img{width:100px;height:105px;flex-shrink:0}
+.room-selected-summary .room-consult-icon{height:75px;margin:0}
+.room-selected-summary>div{min-width:0}
+.room-selected-summary small{display:flex;align-items:center;gap:6px;font-size:8px;color:#6d8659;margin-bottom:6px}
+.room-selected-summary strong{display:block;font-size:14px;font-weight:500;line-height:1.5}
+.room-selected-summary p{font-size:10px;line-height:1.7;color:#6c7b60;margin:7px 0}
+.room-selected-summary div>span{font-size:9px;color:#7b866d}
+@media(max-width:640px){.room-picker{padding:14px;margin-bottom:22px}.room-picker-heading{gap:12px;flex-direction:column}.room-picker-heading h3{font-size:22px}.room-picker-heading>button{align-self:flex-end}.room-choice-grid{grid-template-columns:1fr;gap:10px}.room-choice-image{width:93px}.room-choice-image img{min-height:150px}.room-choice-content>strong{font-size:12px}.room-choice-content>p{font-size:10px}.room-choice-category{font-size:9px}.room-choice-features>span{font-size:8px}.room-choice-select{font-size:10px}.room-picker-finish{flex-direction:column;align-items:stretch}.room-picker-finish>span{max-width:none}.room-picker-finish strong{display:inline}.room-picker-finish .button{width:100%;font-size:11px}.room-selected-summary{gap:11px;padding:10px}.room-selected-summary>img{width:75px;height:110px}.room-selected-summary strong{font-size:12px}.room-selected-summary p{font-size:9px}}

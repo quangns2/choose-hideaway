@@ -1,0 +1,26 @@
+{
+  "name": "@choose-hideaway/backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node db/migrate.mjs && next dev --webpack --hostname 127.0.0.1 --port 3001",
+    "build": "next build --webpack",
+    "start": "node db/migrate.mjs && next start --hostname 127.0.0.1 --port 3001",
+    "db:migrate": "node db/migrate.mjs",
+    "db:check": "node db/check.mjs",
+    "db:import-legacy": "node db/import-legacy.mjs"
+  },
+  "dependencies": {
+    "@choose-hideaway/contracts": "*",
+    "@libsql/client": "^0.18.0",
+    "@next/env": "16.3.4",
+    "next": "16.3.4",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
+  }
+}

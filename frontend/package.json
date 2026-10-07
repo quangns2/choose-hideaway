@@ -1,0 +1,14 @@
+{
+  "name": "@choose-hideaway/frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {"dev": "vite", "build": "tsc --noEmit && vite build", "preview": "vite preview"},
+  "dependencies": {
+    "@choose-hideaway/contracts": "*",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "lucide-react": "1.31.0"
+  },
+  "devDependencies": {"@types/react": "19.2.14", "@types/react-dom": "19.2.3", "@vitejs/plugin-react": "6.0.2", "vite": "8.0.13"}
+}
