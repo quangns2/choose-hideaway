@@ -10,6 +10,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { backend, next, stop } from '../scripts/processes.mjs';
 import { migrateDatabase } from '../backend/db/migrate.mjs';
 import { openDatabase } from '../backend/db/database.mjs';
+import { SMTPServer } from 'smtp-server';
 
 test('admin authentication, private data, state changes and session revocation', {timeout:60000}, async () => {
   // Production build required. Every request and record uses an isolated database.
@@ -20,8 +21,23 @@ test('admin authentication, private data, state changes and session revocation',
   const base=`http://127.0.0.1:${port}`;
   const secret=randomBytes(32).toString('hex');
   const credentials={email:'owner@example.test',password:randomBytes(20).toString('hex')};
+  const messages=[];
+  let rejectRecipient='';
+  const smtp=new SMTPServer({
+    disabledCommands:['STARTTLS'], logger:false,
+    onAuth(_auth,_session,done){done(null,{user:'local-test'});},
+    onRcptTo(recipient,_session,done){
+      if(rejectRecipient==='*'||recipient.address===rejectRecipient)return done(Object.assign(new Error('Test rejection'),{responseCode:550}));
+      done();
+    },
+    onData(stream,session,done){
+      const chunks=[];stream.on('data',chunk=>chunks.push(chunk));
+      stream.on('end',()=>{messages.push({recipients:session.envelope.rcptTo.map(recipient=>recipient.address),raw:Buffer.concat(chunks).toString()});done();});
+    },
+  });
+  await new Promise((done,reject)=>{smtp.once('error',reject);smtp.listen(0,'127.0.0.1',done);});
   const child=spawn(process.execPath,[next,'start','--hostname','127.0.0.1','--port',String(port)],{
-    cwd:backend,env:{...process.env,NODE_ENV:'production',TURSO_DATABASE_URL:'',TURSO_AUTH_TOKEN:'',DATABASE_PATH:filename,ADMIN_SETUP_TOKEN:secret},
+    cwd:backend,env:{...process.env,NODE_ENV:'production',TURSO_DATABASE_URL:'',TURSO_AUTH_TOKEN:'',DATABASE_PATH:filename,ADMIN_SETUP_TOKEN:secret,SMTP_HOST:'127.0.0.1',SMTP_PORT:String(smtp.server.address().port),SMTP_USER:'sender@example.test',SMTP_FROM:'sender@example.test',SMTP_PASS:'local-test-only',BOOKING_NOTIFICATION_EMAIL:'choosehideaway@gmail.com',SITE_URL:base},
     windowsHide:true,stdio:['ignore','pipe','pipe'],
   });
   let logs='';child.stdout.on('data',data=>{logs+=data;});child.stderr.on('data',data=>{logs+=data;});
@@ -59,7 +75,12 @@ test('admin authentication, private data, state changes and session revocation',
     }finally{db.close();}
     const future=n=>new Date(Date.now()+n*86400000).toISOString().slice(0,10);
     const table=await expect('/api/reservations','POST',{kind:'table',name:'QA Admin Table',phone:'0900000000',startDate:future(3),time:'18:30',guests:4,consent:true},201);
-    const room=await expect('/api/reservations','POST',{kind:'room',name:'QA Admin Room',phone:'0900000000',startDate:future(3),endDate:future(5),rooms:1,roomType:'Cần tư vấn',guests:2,consent:true},201);
+    const room=await expect('/api/reservations','POST',{kind:'room',name:'QA Admin Room',email:'guest@example.test',phone:'0900000000',startDate:future(3),endDate:future(5),rooms:1,roomType:'Cần tư vấn',guests:2,consent:true},201);
+    assert.equal(table.data.confirmationEmail,'not-requested');
+    assert.equal(room.data.confirmationEmail,'sent');
+    assert.equal(messages.length,3);
+    assert.equal(messages.filter(message=>message.recipients.includes('choosehideaway@gmail.com')).length,2);
+    assert.equal(messages.filter(message=>message.recipients.includes('guest@example.test')).length,1);
     const id=table.data.id;
     const list=await expect('/api/admin/reservations?kind=table&status=pending&q=QA','GET',undefined,200);assert.equal(list.data.total,1);assert.equal(list.data.rows[0].id,id);assert.equal(list.response.headers.get('cache-control'),'no-store');
     assert.equal((await expect('/api/admin/reservations?q=%25','GET',undefined,200)).data.total,0);
@@ -76,6 +97,23 @@ test('admin authentication, private data, state changes and session revocation',
       assert.equal(stored.prepare('SELECT status FROM reservations WHERE id=?').get(id).status,'pending');
       assert.equal(stored.prepare('SELECT status FROM reservations WHERE id=?').get(room.data.id).status,'pending');
     }finally{stored.close();}
+    const confirmed=await expect('/api/admin/reservations/'+room.data.id,'PATCH',{status:'confirmed',expectedStatus:'pending'},200);
+    assert.equal(confirmed.data.confirmationEmail,'sent');assert.equal(messages.length,4);
+    await expect('/api/admin/reservations/'+room.data.id,'PATCH',{status:'confirmed',expectedStatus:'pending'},409);
+    assert.equal(messages.length,4); // A stale/repeated confirmation must not send another email.
+    const mailBooking={kind:'table',name:'Mail failure test',phone:'0900000000',email:'failure@example.test',startDate:future(3),time:'18:30',guests:2,consent:true};
+    rejectRecipient='failure@example.test';
+    const partial=await expect('/api/reservations','POST',mailBooking,201);
+    assert.equal(partial.data.confirmationEmail,'failed');assert.equal(messages.length,5); // Owner still gets notified.
+    rejectRecipient='*';
+    const failed=await expect('/api/reservations','POST',mailBooking,201);
+    assert.equal(failed.data.confirmationEmail,'failed');assert.equal(messages.length,5);
+    const failureStored=openDatabase(filename);
+    try{assert.equal(failureStored.prepare('SELECT status FROM reservations WHERE id=?').get(failed.data.id).status,'pending');}
+    finally{failureStored.close();}
+    const failedConfirmation=await expect('/api/admin/reservations/'+partial.data.id,'PATCH',{status:'confirmed',expectedStatus:'pending'},200);
+    assert.equal(failedConfirmation.data.confirmationEmail,'failed');
+    rejectRecipient='';
     await expect('/api/admin/logout','POST',{},200);
     await expect('/api/admin/reservations','GET',undefined,401); // Reusing a revoked cookie must fail.
     cookie='';
@@ -87,6 +125,7 @@ test('admin authentication, private data, state changes and session revocation',
     await expect('/api/admin/login','POST',{email:'unknown@example.test',password:'wrong-password'},429);
   } finally {
     if(child.exitCode===null){const exited=new Promise(done=>child.once('exit',done));stop(child);await exited;}
+    await new Promise(done=>smtp.close(done));
     assert.equal(dirname(resolve(folder)),resolve(tmpdir()));assert(basename(folder).startsWith('hideaway-admin-test-'));
     rmSync(folder,{recursive:true,force:true});
   }

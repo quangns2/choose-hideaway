@@ -69,7 +69,34 @@ Khi không cấu hình Turso, database mặc định là `backend/data/reservati
 - `npm run db:import-legacy`: nhập các yêu cầu từ database D1 local cũ trong `.wrangler/state`; giữ nguyên mã, không nhân đôi và không sửa database nguồn.
 - Database D1 trên bản website đã xuất bản trước đây là dữ liệu riêng; lệnh nhập local không chuyển dữ liệu từ hosting.
 
-Yêu cầu mới có trạng thái `pending` (chờ xác nhận); chưa thu tiền, gửi email/SMS hay đồng bộ tồn phòng Booking.com. Danh sách thông tin khách hàng chỉ truy cập được khi đăng nhập quản trị.
+Yêu cầu mới có trạng thái `pending` (chờ xác nhận); chưa thu tiền, gửi SMS hay đồng bộ tồn phòng Booking.com. Khi cấu hình SMTP, hệ thống gửi email báo đơn mới và email cho khách như hướng dẫn dưới đây. Danh sách thông tin khách hàng chỉ truy cập được khi đăng nhập quản trị.
+
+## Email thông báo đặt phòng và đặt bàn
+
+Sau khi lưu yêu cầu thành công, hệ thống gửi:
+
+- Một email đến `choosehideaway@gmail.com`, gồm mã đơn, dịch vụ, tên khách, điện thoại/email, ngày giờ, số khách, phòng và lời nhắn. Có liên kết tới `/admin` nếu đã cấu hình URL website.
+- Một email báo **đã nhận yêu cầu, đang chờ xác nhận** đến khách nếu họ điền email. Email này chưa bảo đảm còn phòng/bàn và chưa xác nhận thanh toán.
+- Khi chủ website chuyển đơn sang **Đã xác nhận** trong admin, gửi thêm email xác nhận cho khách có email. Hủy hoặc đưa về chờ chưa gửi email; cần liên hệ khách trực tiếp cho các thay đổi này.
+
+Nội dung thư có cả tiếng Việt và tiếng Anh. Email khách được gửi riêng, không CC/BCC chung với khách khác. Gửi mail hoàn tất trong request backend; đơn và lịch sử trạng thái được lưu trước khi gửi. Lỗi SMTP không khiến khách đặt lại đơn, và giao diện thông báo khi email khách chưa gửi được. Lỗi gửi được ghi trong log theo mã đơn; hiện chưa có hàng đợi tự gửi lại.
+
+Cấu hình trong `backend/.env.local` khi chạy local và **Environment Variables → Production** trên Vercel:
+
+```dotenv
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=choosehideaway@gmail.com
+SMTP_PASS=mat-khau-ung-dung-google
+BOOKING_NOTIFICATION_EMAIL=choosehideaway@gmail.com
+SITE_URL=https://dia-chi-website-cua-ban
+```
+
+Đăng nhập tài khoản gửi thư, bật xác minh hai bước và tạo **Mật khẩu ứng dụng** tại https://myaccount.google.com/apppasswords . Điền mật khẩu ứng dụng vào `SMTP_PASS`, không dùng mật khẩu đăng nhập Gmail. Xem [hướng dẫn Google](https://support.google.com/mail/answer/185833?hl=vi). Giữ các thông tin SMTP ở backend/Vercel, không đặt trong biến `VITE_`/`NEXT_PUBLIC_` hay commit `.env.local`.
+
+`SITE_URL` dùng địa chỉ HTTPS công khai của website; trên Vercel có thể dùng biến tự động `VERCEL_PROJECT_PRODUCTION_URL` khi không đặt `SITE_URL`. Có thể đổi nhà cung cấp SMTP bằng các biến host/port/user/pass và `SMTP_FROM` (địa chỉ gửi được nhà cung cấp chấp nhận). Cổng 465 dùng TLS trực tiếp; cổng khác yêu cầu STARTTLS, trừ SMTP relay local.
+
+Sau khi điền cấu hình, chạy `npm.cmd run mail:check` để kiểm tra kết nối/xác thực **không gửi email**. Khởi động lại dev server hoặc Redeploy Vercel để nhận cấu hình mới. Sau đó thử đặt một yêu cầu có email của bạn và kiểm tra thư ở cả inbox/spam; xác nhận đơn trong admin để kiểm tra email xác nhận.
 
 ## Kết nối Turso
 
@@ -109,7 +136,7 @@ Khi có `TURSO_DATABASE_URL`, toàn bộ đơn và tài khoản quản trị đ�
 4. Kiểm tra chỗ trống, gọi khách thống nhất giá rồi bấm **Xác nhận**, sau đó duyệt lại thông tin trong hộp thoại và bấm **Xác nhận đặt chỗ**. Yêu cầu chuyển sang **Đã xác nhận**.
 5. Có thể **Hủy** yêu cầu; yêu cầu đã hủy có thể **Đưa về chờ**. Mỗi thay đổi được lưu cùng tài khoản và thời điểm trong `reservation_events`.
 
-Phiên đăng nhập tồn tại 8 giờ, dùng cookie HttpOnly và mật khẩu được băm bằng scrypt. Đăng xuất thu hồi phiên trên server. Không có mật khẩu quản trị mặc định. Xác nhận trong admin chỉ cập nhật hệ thống; bạn vẫn cần thông báo cho khách qua điện thoại.
+Phiên đăng nhập tồn tại 8 giờ, dùng cookie HttpOnly và mật khẩu được băm bằng scrypt. Đăng xuất thu hồi phiên trên server. Không có mật khẩu quản trị mặc định. Xác nhận trong admin cập nhật trạng thái và gửi email xác nhận khi đã cấu hình SMTP và khách có email. Nếu không có email hoặc gửi thất bại, giao diện nhắc liên hệ khách qua điện thoại.
 
 Trong production, trang quản trị là `/admin` trên cùng địa chỉ website. Dùng HTTPS và đặt `ADMIN_SETUP_TOKEN` trong `backend/.env.local` bằng một chuỗi bí mật ngẫu nhiên để mở thiết lập lần đầu. Nhập chuỗi này ở **Có mã thiết lập cho bản triển khai?** trên form tạo tài khoản. Sau khi tạo tài khoản, bỏ biến này và khởi động lại server. Chế độ development chỉ cho phép thiết lập không cần mã trên địa chỉ localhost/127.0.0.1. Frontend quản trị và API cần cùng origin hoặc thông qua proxy như cấu hình mặc định.
 

@@ -1,5 +1,12 @@
 // Vietnamese source keys keep stored room types and API status values stable.
 export const english: Record<string, string> = {
+  'Điền email để nhận thông báo đặt chỗ.': 'Enter your email to receive booking updates.',
+  'Đã gửi thông báo nhận yêu cầu đến {email}. Vui lòng kiểm tra cả thư rác.': 'A request receipt has been sent to {email}. Please also check your spam folder.',
+  'Yêu cầu đã được lưu nhưng email thông báo chưa gửi được. Vui lòng giữ mã yêu cầu và liên hệ hotline nếu cần.': 'Your request is saved, but the email receipt could not be sent. Please keep your reference and call us if needed.',
+  'Sau khi thống nhất giá và chỗ trống với khách, xác nhận tại đây sẽ gửi email cho khách có cung cấp địa chỉ email. Với thay đổi khác hoặc khách không có email, hãy liên hệ trực tiếp.': 'After agreeing on rates and availability, confirming here emails guests who provided an email address. Contact guests directly for other changes or when no email is available.',
+  'Đã gửi email xác nhận cho khách.': 'A confirmation email has been sent to the guest.',
+  'Khách chưa cung cấp email; vui lòng liên hệ qua điện thoại.': 'The guest did not provide an email; please contact them by phone.',
+  'Email xác nhận chưa gửi được. Vui lòng liên hệ khách qua điện thoại.': 'The confirmation email could not be sent. Please contact the guest by phone.',
   'Chọn chỗ nghỉ phù hợp với bạn': 'Find your kind of stay',
   'So sánh loại phòng qua hình ảnh và mô tả trước khi chọn.': 'Compare photos and descriptions to find the right room for you.',
   'Thu gọn': 'Show less', 'Đổi loại phòng': 'Change room type', 'Lựa chọn của bạn': 'Your choice',
@@ -88,7 +95,6 @@ export const english: Record<string, string> = {
   'QUẢN LÝ ĐẶT CHỖ': 'BOOKING MANAGEMENT', 'Tất cả yêu cầu': 'All requests', 'Xem website': 'View website', 'QUẢN TRỊ CHOOSE HIDEAWAY': 'CHOOSE HIDEAWAY ADMIN', 'Đăng xuất': 'Sign out',
   'MỖI YÊU CẦU, MỘT CUỘC HẸN': 'EVERY REQUEST, A NEW VISIT', 'Quản lý đặt chỗ': 'Booking management', 'Kiểm tra thông tin, liên hệ khách và xác nhận yêu cầu.': 'Review details, contact guests and confirm requests.', 'Làm mới': 'Refresh',
   'Chờ xác nhận': 'Pending', 'Đã xác nhận': 'Confirmed', 'Đã hủy': 'Cancelled', 'yêu cầu': 'requests',
-  'Xác nhận tại đây cập nhật trạng thái trên hệ thống. Hãy gọi khách để chốt giá, phòng/bàn và thông báo kết quả; website chưa gửi email/SMS tự động.': 'Confirming here updates the system status. Call guests to agree on rates and availability and notify them of the outcome; the website does not send emails or SMS automatically.',
   'Tên, số điện thoại hoặc mã yêu cầu': 'Name, phone number or reference', 'Tìm kiếm yêu cầu': 'Search requests', 'Tìm': 'Search', 'Trạng thái': 'Status', 'Tất cả': 'All', 'Đang tải…': 'Loading…', 'Giờ Việt Nam': 'Vietnam time',
   '{count} yêu cầu {kind}': '{count} {kind} requests', 'Yêu cầu / khách hàng': 'Request / guest', 'Thông tin đặt chỗ': 'Booking details', 'Thao tác': 'Actions', 'Xem chi tiết': 'View details', 'Không có email': 'No email provided', 'Không có lời nhắn': 'No note provided', 'Gửi:': 'Submitted:', 'phòng/giường': 'rooms/beds',
   'Xác nhận': 'Confirm', 'Hủy': 'Cancel', 'Đưa về chờ': 'Restore to pending', 'Chưa có yêu cầu phù hợp.': 'No matching requests.', 'Yêu cầu mới từ website sẽ xuất hiện tại đây.': 'New website requests will appear here.', 'Bạn có thể đổi bộ lọc hoặc làm mới danh sách.': 'Try changing the filters or refreshing the list.', 'Trang': 'Page', 'Trang trước': 'Previous page', 'Trang tiếp': 'Next page',

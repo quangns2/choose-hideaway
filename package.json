@@ -3,8 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "workspaces": ["frontend", "backend", "shared"],
-  "engines": {"node": ">=22.16.0"},
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "engines": {
+    "node": ">=22.16.0"
+  },
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "dev:frontend": "npm run dev --workspace frontend",
@@ -14,9 +20,14 @@
     "typecheck": "node scripts/typecheck.mjs",
     "db:migrate": "npm run db:migrate --workspace backend",
     "db:check": "npm run db:check --workspace backend",
+    "mail:check": "npm run mail:check --workspace backend",
     "db:import-legacy": "npm run db:import-legacy --workspace backend",
-    "test": "node --experimental-strip-types --test tests/reservations.test.mts tests/database.test.mjs",
+    "test": "node --experimental-strip-types --test tests/reservations.test.mts tests/database.test.mjs tests/mail.test.mjs",
     "test:admin": "node --test tests/admin-api.test.mjs"
   },
-  "devDependencies": {"@types/node": "22.19.19", "typescript": "5.9.3"}
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "smtp-server": "^3.19.22",
+    "typescript": "5.9.3"
+  }
 }

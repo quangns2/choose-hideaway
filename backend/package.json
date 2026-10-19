@@ -9,6 +9,7 @@
     "start": "node db/migrate.mjs && next start --hostname 127.0.0.1 --port 3001",
     "db:migrate": "node db/migrate.mjs",
     "db:check": "node db/check.mjs",
+    "mail:check": "node db/check-mail.mjs",
     "db:import-legacy": "node db/import-legacy.mjs"
   },
   "dependencies": {
@@ -16,10 +17,12 @@
     "@libsql/client": "^0.18.0",
     "@next/env": "16.3.4",
     "next": "16.3.4",
+    "nodemailer": "^10.1.1",
     "react": "19.2.6",
     "react-dom": "19.2.6"
   },
   "devDependencies": {
+    "@types/nodemailer": "^8.0.2",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3"
   }
