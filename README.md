@@ -26,6 +26,10 @@ Biểu mẫu đặt phòng dùng thẻ lựa chọn có ảnh giới thiệu, m�
 
 ## Chạy phát triển
 
+Phần đặt bàn có nút **Xem thực đơn** ngay trong biểu mẫu và thanh đặt bàn nhanh; mục nhà hàng cũng có lối vào trực tiếp. Thực đơn hiển thị 12 danh mục với tên món, mô tả và giá lấy từ `Choose_Hideaway_Menu.pdf` (14 trang), đọc được trên điện thoại và máy tính. Đóng thực đơn hoặc chọn **Quay lại đặt bàn** giữ nguyên thông tin khách đã nhập. Khách có thể mở hoặc tải bản PDF gốc.
+
+Dữ liệu thực đơn nằm ở `frontend/src/restaurant-menu.json`, giao diện ở `frontend/src/RestaurantMenu.tsx` và `frontend/src/restaurant-menu.css`, PDF ở `frontend/public/menus/choose-hideaway-menu.pdf`. Khi thay thực đơn, cập nhật cả dữ liệu và PDF để tên món, giá và ghi chú luôn khớp nhau. Giá hiển thị theo đơn vị nghìn đồng của bản gốc; giao diện và danh mục hỗ trợ EN/VI, tên món và mô tả giữ theo tài liệu gốc.
+
 Cần Node.js >= 22.16 và npm. Với bộ Node đã có trong workspace Windows:
 
 ```powershell

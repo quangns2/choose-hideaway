@@ -1,5 +1,18 @@
 // Vietnamese source keys keep stored room types and API status values stable.
 export const english: Record<string, string> = {
+  'Xem thực đơn': 'View menu', 'Thực đơn nhà hàng': 'Restaurant menu', 'Đóng thực đơn': 'Close menu',
+  'Chọn món cho buổi hẹn của bạn': 'A little inspiration for your table',
+  'Pizza lò củi, steak, mì Ý & đồ uống.': 'Wood-fired pizza, steak, pasta & drinks.',
+  'Danh mục thực đơn': 'Menu categories', 'Món ăn': 'Food', 'Đồ uống': 'Drinks',
+  'Pizza lò củi': 'Wood-fired pizza', 'Khai vị & salad': 'Starters & salads', 'Món chính': 'Hideaway mains',
+  'Mì Ý & món ăn kèm': 'Pasta & sides', 'Burger & bánh mì': 'Burgers & sandwiches', 'Góc Mexico': 'Mexican corner',
+  'Món địa phương & tráng miệng': 'Local favourites & dessert', 'Cocktail': 'Cocktails', 'Bia & rượu vang': 'Beer & wine',
+  'Cà phê & trà': 'Coffee & tea', 'Nước ép, sinh tố & soda': 'Fresh & fruity', 'Nước ngọt & nước uống': 'Cans & water',
+  'Giá tính bằng nghìn đồng (VND). Ví dụ: 160 = 160.000đ.': 'Prices in 1,000 VND. For example: 160 = 160,000 VND.',
+  'Cỡ nhỏ 25 cm / cỡ lớn 30 cm. Giá theo thứ tự nhỏ / lớn.': 'Small 25 cm / large 30 cm. Prices shown as small / large.',
+  'Tên món và mô tả được giữ theo thực đơn gốc.': 'Dish names and descriptions follow the original menu.',
+  'Bạn có dị ứng hoặc nhu cầu ăn uống riêng? Hãy ghi vào phần lưu ý khi đặt bàn.': 'Any allergies or dietary needs? Add them to your notes when reserving a table.',
+  'Mở PDF gốc': 'Open original PDF', 'Tải PDF': 'Download PDF', 'Quay lại đặt bàn': 'Back to your reservation',
   'Điền email để nhận thông báo đặt chỗ.': 'Enter your email to receive booking updates.',
   'Đã gửi thông báo nhận yêu cầu đến {email}. Vui lòng kiểm tra cả thư rác.': 'A request receipt has been sent to {email}. Please also check your spam folder.',
   'Yêu cầu đã được lưu nhưng email thông báo chưa gửi được. Vui lòng giữ mã yêu cầu và liên hệ hotline nếu cần.': 'Your request is saved, but the email receipt could not be sent. Please keep your reference and call us if needed.',
@@ -107,6 +120,11 @@ export const english: Record<string, string> = {
 };
 
 export const vietnamese: Record<string, string> = {
+  'Pizza extras': 'Thêm topping pizza', 'SALAD EXTRAS': 'Thêm món cho salad', 'Side dishes': 'Món ăn kèm', 'Extras': 'Thêm món',
+  'Loaded fries': 'Khoai tây chiên kèm topping', 'Tortillas': 'Tortilla', 'Quesadillas': 'Quesadilla', 'Dessert': 'Tráng miệng',
+  'Craft beer': 'Bia thủ công', 'Bottled beer': 'Bia chai', 'Spirit mixers': 'Rượu pha', 'Wine': 'Rượu vang', 'Tràng An wine': 'Rượu Tràng An',
+  'Coffee': 'Cà phê', 'Tea': 'Trà', 'Smoothies & yogurt': 'Sinh tố & sữa chua', 'Fresh juice': 'Nước ép', 'Soda mix': 'Soda pha',
+  'Soft drinks': 'Nước ngọt', 'Water & more': 'Nước uống & thức uống khác',
   'HOMESTAY & RESTAURANT': 'HOMESTAY & NHÀ HÀNG', 'Homestay & Restaurant.': 'Homestay & Nhà hàng.',
   'YOUR LITTLE HIDEAWAY IN NINH BINH': 'GÓC BÌNH YÊN CỦA BẠN Ở NINH BÌNH', 'STAY · DINE · UNWIND': 'Ở LẠI · DÙNG BỮA · THẢNH THƠI',
   'CHOOSE YOUR OWN PACE': 'CHỌN NHỊP SỐNG CỦA RIÊNG BẠN', '01 / STAY A LITTLE LONGER': '01 / Ở LẠI THÊM MỘT CHÚT', '/ STAY': '/ LƯU TRÚ',
